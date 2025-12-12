@@ -1,3 +1,4 @@
+python
 import requests
 import uuid
 import platform
@@ -12,6 +13,8 @@ api_key = os.getenv("SELLIX_API_KEY")
 
 if not api_key:
     raise RuntimeError("SELLIX_API_KEY environment variable is not set")
+
+SELLIX_BASE_URL = os.getenv("SELLIX_BASE_URL", "add url")
 
 def get_hardware_id():
     mac = uuid.getnode()
@@ -32,7 +35,7 @@ def get_hardware_id():
 
 
 def test_shop_api():
-    url = "https://dev.sellix.io/v1/self"
+    url = f"{SELLIX_BASE_URL}/v1/self"
 
     headers = {"Authorization": f"Bearer {api_key}"}
 
@@ -41,7 +44,7 @@ def test_shop_api():
     print(response.text)
 
 def orders():
-    url = "https://dev.sellix.io/v1/orders"
+    url = f"{SELLIX_BASE_URL}/v1/orders"
 
     headers = {"Authorization": f"Bearer {api_key}"}
 
@@ -93,7 +96,7 @@ def set_hardware_id(bot_type):
 
     product, license = extract_productid_licensekey(bot_type)
     print(product, license)
-    url = "https://dev.sellix.io/v1/products/licensing/hardware_id"
+    url = f"{SELLIX_BASE_URL}/v1/products/licensing/hardware_id"
 
     payload = {
         "product_id": product,
@@ -120,7 +123,7 @@ def set_hardware_id(bot_type):
 def add_hwid(uniqid):
 
 
-    url = f"https://dev.sellix.io/v1/orders/{uniqid}/custom_fields"
+    url = f"{SELLIX_BASE_URL}/v1/orders/{uniqid}/custom_fields"
 
     payload = {"custom_fields": [
         {
@@ -175,6 +178,8 @@ def extract_hwid_uniqid(response_data):
 
 
 
+
+
 #check_existing_hwid()
 
 def extract_license_uniqid(bot_type):
@@ -182,7 +187,7 @@ def extract_license_uniqid(bot_type):
     product, license = extract_productid_licensekey(bot_type)
 
 
-    url = "https://dev.sellix.io/v1/products/licensing/check"
+    url = f"{SELLIX_BASE_URL}/v1/products/licensing/check"
 
     payload = {
         "product_id": product,
@@ -228,7 +233,7 @@ def check_license(bot_type):
 
     product, license = extract_productid_licensekey(bot_type)
 
-    url = "https://dev.sellix.io/v1/products/licensing/check"
+    url = f"{SELLIX_BASE_URL}/v1/products/licensing/check"
 
     payload = {
         "product_id": product,
@@ -278,7 +283,7 @@ def check_existing_hwid(bot_type):
 
 
     #add logic to check orders list for a matching hwid
-    url = "https://dev.sellix.io/v1/orders"
+    url = f"{SELLIX_BASE_URL}/v1/orders"
 
     headers = {"Authorization": f"Bearer {api_key}"}
 
@@ -330,11 +335,6 @@ bot = "oyster_shucker"
 
 #user boots up first we check their hwid isnt being used already
 #check_existing_hwid()
-
-
-
-
-
 
 
 
